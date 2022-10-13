@@ -1,74 +1,105 @@
-function pintarCalendario() {
-  document.write(`<h1>Calendario</h1>
-    <div id='tecla'>
-    <table border="1" cellpadding="4" align="center">		
-      <caption id="mes" style="font-size: 25px; margin: 30px; "> </caption> 		
-     <tr>
-      <th  colspan="1">L</th>
-      <th  colspan="2">M</th>
-      <th  colspan="3">X</th>
-      <th  colspan="4">J</th>
-      <th  colspan="5">V</th>
-      <th  colspan="6">S</th>
-      <th  colspan="7">D</th>
-     </tr>
-    <tbody>   
-      <tr id="fila1">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>   
-      <tr id="fila2">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>   
-      <tr id="fila3">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>   
-      <tr id="fila4">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>   
-      <tr id="fila5">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>
-      <tr id="fila6">
-          <td colspan="1" class="lu"> </td>
-          <td colspan="2" class="ma"> </td>
-          <td colspan="3" class="mi"> </td>
-          <td colspan="4" class="ju"> </td>
-          <td colspan="5" class="vi"> </td>
-          <td colspan="6" class="sa"> </td>
-          <td colspan="7" class="do"> </td>
-      </tr>	   
-    </tbody>	     
-    </table>`);
+var h2 = document.querySelector(".calendar-picture h2");
+var h3 = document.querySelector(".calendar-picture h3");
+
+var monthArr = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
+var dayArr = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miercoles",
+  "Jueves",
+  "Viernes",
+  "Sabado",
+];
+
+var day31MonthArr = [
+  "Enero",
+  "Marzo",
+  "Mayo",
+  "Julio",
+  "Agosto",
+  "Octubre",
+  "Diciembre",
+];
+
+var d = new Date();
+
+var obj = getDate();
+generateCalendar();
+
+//FUNCION GETDATE
+
+function getDate() {
+  var month = d.getMonth();
+  month = monthArr[month];
+
+  var day = d.getDay();
+  day = dayArr[day];
+
+  var date = d.getDate();
+
+  h2.innerHTML = date + ", " + day;
+  h3.innerHTML = month;
+
+  return { m: month, dy: day, dt: date, yr: d.getFullYear() };
 }
 
-pintarCalendario();
+//FUNCION GENERATECALENDAR
+
+function generateCalendar() {
+  var days;
+
+  if (obj.m === "Febrero" && obj.yr % 4 !== 0) {
+    days = 28;
+  } else if (obj.m === "Febrero" && obj.yr % 4 === 0) {
+    days = 29;
+  } else if (day31MonthArr.includes(obj.m)) {
+    days = 31;
+  } else {
+    days = 30;
+  }
+
+  var LocalDayArr = [
+    "Lunes",
+    "Martes",
+    "Miercoles",
+    "Jueves",
+    "Viernes",
+    "Sabado",
+    "Domingo",
+  ];
+
+  var startOfMonth = moment().clone().startOf("month").format("dddd");
+
+  var dayIndex = LocalDayArr.indexOf(startOfMonth);
+
+  for (var j = 0; j < dayIndex; j++) {
+    var element = document.createElement("div");
+    element.className = "calendar__number_empty";
+    document.getElementById("lc").appendChild(element);
+  }
+
+  for (var k = 1; k <= days; k++) {
+    var element = document.createElement("div");
+    obj.dt === k
+      ? (element.className = "calendar__number calendar__number--current")
+      : (element.className = "calendar__number");
+
+    element.appendChild(document.createTextNode(k));
+    document.getElementById("lc").appendChild(element);
+  }
+}
